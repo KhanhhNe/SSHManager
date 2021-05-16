@@ -6,8 +6,11 @@ from dataclasses import dataclass
 from functools import wraps
 from typing import List
 
+import httpx
+import httpx_socks
 
 LOGGING = True
+origin_ip = httpx.get('https://api.ipify.org/?format=text').text
 
 
 def set_logging(print_log):
@@ -19,9 +22,9 @@ class ProcessTerminator:
     """Terminates all proxy connection when app closed down."""
     def __init__(self):
         self.processes: List[asyncio.subprocess.Process] = []
-        atexit.register(lambda: asyncio.get_event_loop().run_until_complete(self.kill_all_processes()))
+        atexit.register(self.kill_all_processes)
 
-    async def kill_all_processes(self):
+    def kill_all_processes(self):
         for process in self.processes:
             if process.returncode is None:
                 process.terminate()
@@ -105,16 +108,30 @@ async def _connect_ssh(host, username, password, port=None, retries=0):
         output = list(done)[0].result().decode(errors='ignore').strip()
         if 'Enabled SOCKS/HTTP proxy forwarding on ' in output:
             port = re.search(r'Enabled SOCKS/HTTP proxy forwarding on .*?:(\d+)', output).group(1)
-            # TODO: add proxy verification before returning
-            return ProxyInfo(
+            proxy_info = ProxyInfo(
                 port=int(port),
                 pid=process.pid
             )
+            if await is_proxy_usable(proxy_info):
+                return proxy_info
+            else:
+                kill_proxy(proxy_info)
+                raise ProxyConnectionError
 
     raise ProxyConnectionError
 
 
-async def kill_proxy(proxy_info: ProxyInfo):
+async def is_proxy_usable(proxy_info: ProxyInfo):
+    """Validate if the proxy actually works"""
+    transport = httpx_socks.AsyncProxyTransport.from_url(proxy_info.address)
+    try:
+        async with httpx.AsyncClient(transport=transport, timeout=30) as client:
+            return (await client.get('https://api.ipify.org?format=text')).text != origin_ip
+    except:
+        return False
+
+
+def kill_proxy(proxy_info: ProxyInfo):
     """Kill bitvise process associated with proxy."""
     _terminator.kill_process(proxy_info.pid)
 
