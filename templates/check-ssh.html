@@ -17,7 +17,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 
-<body class="text-truncate">
+<body>
     <div class="container" id="main-app">
         <div class="modal fade" role="dialog" tabindex="-1" id="settings-modal">
             <div class="modal-dialog" role="document">
@@ -57,7 +57,7 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col"><button class="btn btn-primary mx-1" type="button">Check SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
+            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="check_ssh()">Check SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-on:onclick="ssh_text = ''">Import SSH</button></div>
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>IP</th>
@@ -96,13 +96,13 @@
                         <h1 class="text-left text-success">Live</h1>
                     </div>
                     <div class="col text-right">
-                        <div class="btn-group"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_list, 'ssh.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" type="button"></button>
-                            <div class="dropdown-menu"><a class="dropdown-item" href="#" v-on:click="ssh_list = []">Delete list</a></div>
+                        <div class="btn-group"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_live_list, 'live.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                            <div class="dropdown-menu"><a class="dropdown-item" href="#" v-on:click="ssh_live_list = []">Delete list</a></div>
                         </div>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>IP</th>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>IP</th>
@@ -172,9 +172,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/bs-init.js?h=75b741e6afdc9ac33d9fde7f010bc77e"></script>
-    <script src="/assets/js/check-ssh.js?h=167df3789ca2e7d4791dd7145d979368"></script>
+    <script src="/assets/js/check-ssh.js?h=1bdf6141ce915067849685ae7da6bf81"></script>
     <script src="/assets/js/vue-app.js?h=31dcc54fab006baede4b185cb32ae2b0"></script>
-    <script src="/assets/js/common.js?h=56171d85d59a5771ead03daedd6dc0a7"></script>
+    <script src="/assets/js/common.js?h=1a1b3d2a97388b54bc8ffe36319df723"></script>
     <script src="/assets/js/fileSaver.js?h=3dc79a489531e4f96ebcb674709ec092"></script>
 </body>
 
