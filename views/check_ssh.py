@@ -1,8 +1,16 @@
-import flask_socketio
+import asyncio
 
+from flask_socketio import Namespace
+
+import controllers
 import models
+from views import common
 
 
-# noinspection PyMethodMayBeStatic
-class CheckSSHNamespace(flask_socketio.Namespace):
-    pass
+class CheckSSHNamespace(common.CommonNamespace):
+    def on_connect(self):
+        super().on_connect()
+        for ssh in models.get_ssh_live_list():
+            self.emit('live', ssh)
+        for ssh in models.get_ssh_die_list():
+            self.emit('die', ssh)
