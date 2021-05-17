@@ -57,7 +57,7 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="connect_ssh()">Connect SSH</button><button class="btn btn-danger mx-1" type="button" onclick="connect_ssh()">Disconnect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
+            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="connect_ssh()">Connect SSH</button><button class="btn btn-danger mx-1" type="button" onclick="socket.emit(&#39;disconnect_ssh&#39;)">Disconnect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
         </div>
         <div class="row">
             <div class="col">
@@ -75,13 +75,13 @@
                         <thead>
                             <tr>
                                 <th>Port</th>
-                                <th>IP</th>
+                                <th class="text-right">IP</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="proxy in proxy_list" :key="proxy.port">
+                            <tr v-for="proxy in proxy_list" :key="proxy.port" :class="{ 'table-danger': !proxy.ip }">
                                 <td>{{proxy.port}}</td>
-                                <td>{{proxy.ip}}</td>
+                                <td class="text-right">{{proxy.ip}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -121,7 +121,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/bs-init.js?h=75b741e6afdc9ac33d9fde7f010bc77e"></script>
-    <script src="/assets/js/connect-ssh.js?h=afce1b6c0c1c43782d52fa09d717f546"></script>
+    <script src="/assets/js/connect-ssh.js?h=2baca7758c50fd61b5cfdace24f60f59"></script>
     <script src="/assets/js/vue-app.js?h=31dcc54fab006baede4b185cb32ae2b0"></script>
     <script src="/assets/js/common.js?h=1a1b3d2a97388b54bc8ffe36319df723"></script>
     <script src="/assets/js/fileSaver.js?h=3dc79a489531e4f96ebcb674709ec092"></script>
