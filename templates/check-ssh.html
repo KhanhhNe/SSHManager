@@ -38,7 +38,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Modal Title</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Import SSH</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body"><textarea placeholder="1.2.3.4|user|pass" style="width: 100%;" rows="10" onchange="vm.$data.ssh_text = this.value"></textarea></div>
                     <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-on:click="import_ssh_text(ssh_text)" data-toggle="modal" data-target="#import-ssh-modal">Import</button></div>
@@ -49,7 +49,7 @@
             <div class="container-fluid"><a class="navbar-brand" href="#">SSH Manager</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navcol-1">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link active" href="/check-ssh">Check SSH</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/check-ssh">Check SSH</a></li>
                         <li class="nav-item"><a class="nav-link" href="/connect-ssh">Connect SSH</a></li>
                     </ul><span class="navbar-text actions"> <button class="btn btn-light action-button" type="button" data-toggle="modal" data-target="#settings-modal" v-on:click="temp_settings = settings">Settings</button></span>
                 </div>
@@ -173,7 +173,7 @@
     <script src="/assets/js/bs-init.js"></script>
     <script src="/assets/js/common.js"></script>
     <script src="/assets/js/fileSaver.js"></script>
-    <script src="/assets/js/vue-mockup.js"></script>
+    <script src="/assets/js/vue-app.js"></script>
 </body>
 
 </html>
