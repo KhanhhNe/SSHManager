@@ -80,14 +80,18 @@ class ProxyPool:
                 await asyncio.sleep(0.5)
             return self.ssh_info.pop(0)
 
-    async def proxy_port(self, port):
-        """Auto arrange SSH for a port, ensuring continuous proxy connection on that port."""
+    async def proxy_port(self, port, callback=None):
+        """Auto arrange SSH for a port, ensuring continuous proxy connection on that port.
+        Callback is called with a bool param which shows if port is under proxy or not."""
         proxy_info = None
         while True:
             await asyncio.sleep(1)
             if proxy_info is not None and await is_proxy_usable(proxy_info.address):
+                if callback is not None:
+                    callback(True)
                 continue
 
+            callback(False)
             ssh_info = await self.get_ssh()
             if await verify_ssh(*ssh_info):
                 proxy_info = await connect_ssh(*ssh_info, port)
