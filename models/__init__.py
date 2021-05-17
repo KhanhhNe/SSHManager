@@ -9,6 +9,7 @@ SETTINGS_FILE = 'user_data/settings.json'
 
 
 for filename in (SSH_FILE, SSH_LIVE_FILE, SSH_DIE_FILE):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     if not os.path.exists(filename):
         open(filename, 'w+').write('[]')
 if not os.path.exists(SETTINGS_FILE):

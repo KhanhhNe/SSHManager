@@ -1,0 +1,44 @@
+﻿name: SSHManager
+channels:
+  - defaults
+dependencies:
+  - ca-certificates=2021.4.13=haa95532_1
+  - certifi=2020.12.5=py39haa95532_0
+  - openssl=1.1.1k=h2bbff1b_0
+  - pip=21.0.1=py39haa95532_0
+  - python=3.9.4=h6244533_0
+  - sqlite=3.35.4=h2bbff1b_0
+  - tzdata=2020f=h52ac0ba_0
+  - vc=14.2=h21ff451_1
+  - vs2015_runtime=14.27.29016=h5e58377_2
+  - wheel=0.36.2=pyhd3eb1b0_0
+  - wincertstore=0.2=py39h2bbff1b_0
+  - pip:
+    - async-timeout==3.0.1
+    - bcrypt==3.2.0
+    - bidict==0.21.2
+    - cffi==1.14.5
+    - click==8.0.0
+    - colorama==0.4.4
+    - cryptography==3.4.7
+    - flask==2.0.0
+    - flask-socketio==5.0.3
+    - h11==0.12.0
+    - httpcore==0.13.3
+    - httpx==0.18.1
+    - httpx-socks==0.4.0
+    - idna==3.1
+    - itsdangerous==2.0.0
+    - jinja2==3.0.0
+    - markupsafe==2.0.0
+    - pefile==2021.5.13
+    - pycparser==2.20
+    - python-engineio==4.2.0
+    - python-socketio==5.3.0
+    - python-socks==1.2.4
+    - rfc3986==1.5.0
+    - setuptools==56.2.0
+    - six==1.16.0
+    - sniffio==1.2.0
+    - werkzeug==2.0.0
+prefix: C:\Users\khanh\miniconda3\envs\SSHManager
