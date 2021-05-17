@@ -27,7 +27,7 @@ def get_assets(path):
     return send_from_directory('templates/assets', path)
 
 
-views.setup_default_events(socketio)
+socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
