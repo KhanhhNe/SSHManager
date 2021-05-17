@@ -1,3 +1,6 @@
+socket.on('ssh', function (ssh_list) { vm.$data.ssh_list = ssh_list })
+
+
 function export_csv(export_data, filename) {
     if (!export_data) return;
     const headers = [Object.keys(export_data[0]).join('|')]
@@ -16,4 +19,5 @@ function import_ssh_text(ssh_text) {
             'password': splitted[2]
         }
     })
+    socket.emit('ssh', vm.$data.ssh_lis)
 }

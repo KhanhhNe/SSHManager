@@ -1,6 +1,10 @@
 from flask import Flask, redirect, send_file, send_from_directory
+from flask_socketio import SocketIO
+
+import views
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 @app.route('/')
@@ -23,5 +27,7 @@ def get_assets(path):
     return send_from_directory('templates/assets', path)
 
 
+views.setup_default_events(socketio)
+
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app, debug=True)
