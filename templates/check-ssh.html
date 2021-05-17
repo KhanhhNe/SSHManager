@@ -31,7 +31,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-on:click="settings = temp_settings" data-toggle="modal" data-target="#settings-modal">Save</button></div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-on:click="settings = temp_settings; socket.emit('settings', settings)" data-toggle="modal" data-target="#settings-modal">Save</button></div>
                 </div>
             </div>
         </div>

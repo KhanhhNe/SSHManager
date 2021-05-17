@@ -57,7 +57,7 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col"><button class="btn btn-primary mx-1" type="button">Connect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
+            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="connect_ssh()">Connect SSH</button><button class="btn btn-danger mx-1" type="button" onclick="connect_ssh()">Disconnect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
         </div>
         <div class="row">
             <div class="col">
@@ -66,8 +66,8 @@
                         <h3>Connect info</h3>
                     </div>
                 </div>
-                <div class="input-group">
-                    <div class="input-group-prepend"><span class="input-group-text">Port</span></div><input class="form-control" type="text" data-toggle="tooltip" data-bss-tooltip="" data-placement="left" name="port" placeholder="1234,1230-1239,..." pattern="^(?:(\d+|(?:\d+-\d+)),)*(\d+|(?:\d+-\d+))$" required="" title="Port number(s) to connect SSH to, seperated by a comma (,). Can be in individual format (12345), range format (1230-1239).">
+                <div class="input-group" id="connect-ssh-input">
+                    <div class="input-group-prepend"><span class="input-group-text">Port</span></div><input class="form-control" type="text" data-toggle="tooltip" data-bss-tooltip="" data-placement="left" id="port-input" name="port" placeholder="1234,1230-1239,..." pattern="^(?:(\d+|(?:\d+-\d+)),)*(\d+|(?:\d+-\d+))$" required="" title="Port number(s) to connect SSH to, seperated by a comma (,). Can be in individual format (12345), range format (1230-1239).">
                     <div class="input-group-append"></div>
                 </div>
                 <div class="table-responsive">
@@ -121,7 +121,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/bs-init.js?h=75b741e6afdc9ac33d9fde7f010bc77e"></script>
-    <script src="/assets/js/connect-ssh.js?h=173f21b44a9ff7a2b93d4643eebd47cf"></script>
+    <script src="/assets/js/connect-ssh.js?h=afce1b6c0c1c43782d52fa09d717f546"></script>
     <script src="/assets/js/vue-app.js?h=31dcc54fab006baede4b185cb32ae2b0"></script>
     <script src="/assets/js/common.js?h=1a1b3d2a97388b54bc8ffe36319df723"></script>
     <script src="/assets/js/fileSaver.js?h=3dc79a489531e4f96ebcb674709ec092"></script>

@@ -10,6 +10,7 @@ class CheckSSHNamespace(common.CommonNamespace):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.loop = asyncio.new_event_loop()
+        self.semaphore = asyncio.Semaphore(models.get_settings()['process_count'], loop=self.loop)
 
     def on_connect(self):
         super().on_connect()
@@ -28,9 +29,10 @@ class CheckSSHNamespace(common.CommonNamespace):
         self.loop.run_until_complete(fut)
 
     async def check_ssh_handler(self, ssh):
-        if await controllers.verify_ssh(*ssh.values()):
-            models.set_ssh_live_list(models.get_ssh_live_list() + [ssh])
-            self.emit('live', ssh)
-        else:
-            models.set_ssh_die_list(models.get_ssh_die_list() + [ssh])
-            self.emit('die', ssh)
+        async with self.semaphore:
+            if await controllers.verify_ssh(*ssh.values()):
+                models.set_ssh_live_list(models.get_ssh_live_list() + [ssh])
+                self.emit('live', ssh)
+            else:
+                models.set_ssh_die_list(models.get_ssh_die_list() + [ssh])
+                self.emit('die', ssh)

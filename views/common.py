@@ -6,6 +6,7 @@ import models
 class CommonNamespace(Namespace):
     def on_connect(self):
         self.on_ssh()
+        self.on_settings()
 
     def on_ssh(self, ssh_list=None):
         """Get/Set SSH list on server/client request. If event emitted without ssh_list, returns current SSH list."""
@@ -13,3 +14,9 @@ class CommonNamespace(Namespace):
             models.set_ssh_list(ssh_list)
         else:
             self.emit('ssh', models.get_ssh_list())
+
+    def on_settings(self, settings=None):
+        if settings is not None:
+            models.set_settings(settings)
+        else:
+            self.emit('settings', models.get_settings())

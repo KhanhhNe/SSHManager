@@ -28,6 +28,7 @@ def get_assets(path):
 
 
 socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
+socketio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

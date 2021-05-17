@@ -5,11 +5,14 @@ from typing import Dict, List
 SSH_FILE = 'user_data/ssh.json'
 SSH_LIVE_FILE = 'user_data/live.json'
 SSH_DIE_FILE = 'user_data/die.json'
+SETTINGS_FILE = 'user_data/settings.json'
 
 
 for filename in (SSH_FILE, SSH_LIVE_FILE, SSH_DIE_FILE):
     if not os.path.exists(filename):
         open(filename, 'w+').write('[]')
+if not os.path.exists(SETTINGS_FILE):
+    open(SETTINGS_FILE, 'w+').write('{"process_count":20}')
 
 
 def get_ssh_list() -> List[Dict[str, str]]:
@@ -34,3 +37,11 @@ def get_ssh_die_list():
 
 def set_ssh_die_list(ssh_list):
     json.dump(ssh_list, open(SSH_DIE_FILE, 'w', encoding='utf-8'))
+
+
+def get_settings():
+    return json.load(open(SETTINGS_FILE, encoding='utf-8'))
+
+
+def set_settings(settings):
+    json.dump(settings, open(SETTINGS_FILE, 'w', encoding='utf-8'))
