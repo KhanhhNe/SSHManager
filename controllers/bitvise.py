@@ -87,6 +87,7 @@ class ProxyPool:
         Callback is called with a bool param which shows if port is under proxy or not."""
         proxy_info = None
         ssh_info = None
+        callback = callback or _default_callback
 
         while True:
             if self.disconnected:
@@ -97,8 +98,7 @@ class ProxyPool:
 
             await asyncio.sleep(1)
             if proxy_info is not None and await is_proxy_usable(proxy_info.address, ssh_info[0]):
-                if callback is not None:
-                    callback(port, ssh_info[0])
+                callback(port, ssh_info[0])
                 continue
 
             callback(port, '')
@@ -112,6 +112,11 @@ class ProxyPool:
 
     def disconnect_all_ports(self):
         self.disconnected = True
+
+
+# noinspection PyUnusedLocal
+def _default_callback(port, proxy_ip):
+    pass  # Do nothing
 
 
 _terminator = ProcessTerminator()
@@ -211,7 +216,7 @@ if __name__ == '__main__':
 
     # Test port proxying
     ssh_lines = open('ssh.csv').read().splitlines()
-    ssh = [l.split('|')[:3] for l in ssh_lines]
+    ssh = [line.split('|')[:3] for line in ssh_lines]
     pool = ProxyPool()
     for s in ssh:
         pool.add_ssh(s[0], s[1], s[2])
