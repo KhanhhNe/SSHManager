@@ -35,5 +35,6 @@ socket.on('port_proxy', port_data => {
     }
     if (!found) {
         vm.$data.proxy_list.push(port_data)
+        vm.$data.proxy_list.sort((p1, p2) => p1.port > p2.port ? 1 : -1)
     }
 })

@@ -1,3 +1,7 @@
+import logging
+import socket
+import webbrowser
+
 from flask import Flask, redirect, send_file, send_from_directory
 from flask_socketio import SocketIO
 
@@ -5,6 +9,10 @@ import views
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='threading')
+handler = logging.FileHandler('logs.log', mode='w+', encoding='utf-8', delay=False)
+handler.setLevel(logging.INFO)
+handler.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
+app.logger.addHandler(handler)
 
 
 @app.route('/')
@@ -31,4 +39,8 @@ socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
 socketio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    ip = socket.gethostbyname(socket.gethostname())
+    port = 5000
+    url = f"http://{ip}:{port}"
+    webbrowser.open_new_tab(url)
+    socketio.run(app, host='0.0.0.0', port=port)
