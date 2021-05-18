@@ -11,8 +11,9 @@ while not packages_path.endswith('site-packages'):
 
 
 PyInstaller.__main__.run([
-    'main.py', '--name=SSHManager', '--onedir', '--noconfirm', '--clean',
-    '--add-data=templates;templates', '--add-binary=controllers/*.exe;controllers',
+    'main.py', '--name=SSHManager', '--icon=logo.ico', '--onedir', '--noconfirm', '--clean',
+    '--add-data=templates;templates',
+    '--add-binary=controllers/*.exe;controllers', '--add-binary=logo.ico;.',
     f'--paths={packages_path}',
     '--hidden-import=engineio.async_drivers.threading'
 ])

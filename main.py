@@ -35,6 +35,11 @@ def get_assets(path):
     return send_from_directory('templates/assets', path)
 
 
+@app.route('/favicon.ico')
+def get_icon():
+    return send_file('logo.ico')
+
+
 socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
 socketio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
 
