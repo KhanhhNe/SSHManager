@@ -189,7 +189,7 @@ async def is_proxy_usable(proxy_address, ip):
     transport = httpx_socks.AsyncProxyTransport.from_url(proxy_address)
     try:
         async with httpx.AsyncClient(transport=transport, timeout=30) as client:
-            return (await client.get('https://api.ipify.org?format=text')).text != ip
+            return (await client.get('https://api.ipify.org?format=text')).text == ip
     except:
         return False
 
