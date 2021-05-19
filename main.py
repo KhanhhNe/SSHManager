@@ -2,8 +2,8 @@ import logging
 import socket
 import webbrowser
 
-from flask import Flask, redirect, send_file, send_from_directory
-from flask_socketio import SocketIO
+from flask import Flask, redirect, send_file, send_from_directory, request
+from flask_socketio import SocketIO, emit
 
 import views
 
@@ -28,6 +28,17 @@ def check_ssh_route():
 @app.route('/connect-ssh')
 def connect_ssh_route():
     return send_file('templates/connect-ssh.html')
+
+
+@app.route('/emit')
+def emit_signal():
+    """Emit signal to server & client."""
+    requested = request.get_json()
+    try:
+        emit(requested['event'], requested['data'], namespace=requested['path'], broadcast=True, include_self=True)
+        return 1
+    except AttributeError:
+        return 0
 
 
 @app.route('/assets/<path:path>')
