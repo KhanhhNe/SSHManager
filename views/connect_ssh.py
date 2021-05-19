@@ -24,7 +24,10 @@ class ConnectSSHNamespace(common.CommonNamespace):
         aws = [self.pool.proxy_port(port, self.port_proxy_callback) for port in port_list]
         self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
 
-    def on_disconnect_ssh(self):
+    def on_reset_port(self, port):
+        self.pool.reset_port(port)
+
+    def on_disconnect_all_ssh(self):
         self.pool.disconnect_all_ports()
 
     def port_proxy_callback(self, port, ip):

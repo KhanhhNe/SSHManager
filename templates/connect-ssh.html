@@ -57,7 +57,7 @@
             </div>
         </nav>
         <div class="row">
-            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="connect_ssh()">Connect SSH</button><button class="btn btn-danger mx-1" type="button" onclick="socket.emit(&#39;disconnect_ssh&#39;)">Disconnect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
+            <div class="col"><button class="btn btn-primary mx-1" type="button" onclick="connect_ssh()">Connect SSH</button><button class="btn btn-secondary mx-1" type="button" onclick="$(&#39;.reset-port:not(.invisible)&#39;).click()">Reset all port</button><button class="btn btn-danger mx-1" type="button" onclick="socket.emit(&#39;disconnect_all_ssh&#39;)">Disconnect SSH</button><button class="btn btn-outline-primary mx-1" type="button" data-toggle="modal" data-target="#import-ssh-modal" v-bind:onclick="ssh_text = ''">Import SSH</button></div>
         </div>
         <div class="row">
             <div class="col">
@@ -75,13 +75,15 @@
                         <thead>
                             <tr>
                                 <th>Port</th>
-                                <th class="text-right">IP</th>
+                                <th>IP</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="proxy in proxy_list" :key="proxy.port" :class="{ 'table-danger': !proxy.ip }">
                                 <td>{{proxy.port}}</td>
-                                <td class="text-right">{{proxy.ip}}</td>
+                                <td>{{proxy.ip}}</td>
+                                <td><button class="btn btn-danger btn-sm reset-port" type="button" onclick="socket.emit(&#39;reset_port&#39;, $(this).data(&#39;port&#39;))" v-bind:class="{ invisible: !proxy.ip }" v-bind:data-port="proxy.port">Reset</button></td>
                             </tr>
                         </tbody>
                     </table>

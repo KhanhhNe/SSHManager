@@ -58,6 +58,7 @@ class ProxyPool:
         self.loop = loop or asyncio.get_event_loop()
         asyncio.set_event_loop(loop)
         self.disconnected = False
+        self.port_resetting = {}
         self.ssh_info = []
         self.lock = asyncio.Lock()
         self.semaphore = asyncio.Semaphore(process_count)
@@ -75,7 +76,7 @@ class ProxyPool:
     async def get_ssh(self):
         """Wait until there is at least 1 SSH and return it."""
         while not self.ssh_info:
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
 
         async with self.lock:
             while not self.ssh_info:
@@ -88,13 +89,20 @@ class ProxyPool:
         proxy_info = None
         ssh_info = None
         callback = callback or _default_callback
+        self.port_resetting[port] = False
 
         while True:
-            if self.disconnected:
+            if port == 8003:
+                print(self.disconnected, self.port_resetting)
+            if self.disconnected or self.port_resetting[port]:
                 if proxy_info is not None:
                     kill_proxy(proxy_info)
                 callback(port, '')
-                return
+
+                if self.disconnected:
+                    return
+                else:
+                    self.port_resetting[port] = False
 
             await asyncio.sleep(1)
             if proxy_info is not None and await is_proxy_usable(proxy_info.address, ssh_info[0]):
@@ -109,6 +117,9 @@ class ProxyPool:
                     print(f"Proxy port {port} with {ssh_info[0]}")
             except ProxyConnectionError:
                 proxy_info = None
+
+    def reset_port(self, port):
+        self.port_resetting[port] = True
 
     def disconnect_all_ports(self):
         self.disconnected = True
