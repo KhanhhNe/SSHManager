@@ -25,10 +25,13 @@ def emit_signal():
     """Emit signal to server & client."""
     requested = request.get_json()
     try:
-        emit(requested['event'], requested['data'], namespace=requested['path'], broadcast=True, include_self=True)
-        return 1
+        emit(
+            requested['event'], requested['data'], namespace=requested.get('path', '/'),
+            broadcast=True, include_self=True
+        )
+        return 1, 200
     except AttributeError:
-        return 0
+        return 0, 400
 
 
 @app.route('/assets/<path:path>')
