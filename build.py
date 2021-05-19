@@ -34,4 +34,6 @@ for folder, subfolders, filenames in os.walk(r'dist\SSHManager'):
 built_file.close()
 print("Removing dist folder...")
 shutil.rmtree('dist')
+os.remove('main.spec')
+os.remove('SSHManager.spec')
 print("Done! Happy distributing!")
