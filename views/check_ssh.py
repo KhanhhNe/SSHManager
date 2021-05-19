@@ -36,3 +36,9 @@ class CheckSSHNamespace(common.CommonNamespace):
             else:
                 models.set_ssh_die_list(models.get_ssh_die_list() + [ssh])
                 self.emit('die', ssh)
+
+    def on_clear_live(self):
+        models.set_ssh_live_list([])
+
+    def on_clear_die(self):
+        models.set_ssh_die_list([])
