@@ -1,4 +1,7 @@
 import asyncio
+import json
+
+import flask
 
 import controllers
 import models
@@ -42,3 +45,26 @@ class CheckSSHNamespace(common.CommonNamespace):
 
     def on_clear_die(self):
         models.set_ssh_die_list([])
+
+
+check_ssh_blueprint = flask.Blueprint('check_ssh', 'check_ssh')
+
+
+@check_ssh_blueprint.route('/')
+def check_ssh_html():
+    return flask.send_file('templates/check-ssh.html')
+
+
+@check_ssh_blueprint.route('/ssh')
+def ssh_list():
+    return json.dumps(models.get_ssh_list())
+
+
+@check_ssh_blueprint.route('/live')
+def ssh_live_list():
+    return json.dumps(models.get_ssh_live_list())
+
+
+@check_ssh_blueprint.route('/die')
+def ssh_die_list():
+    return json.dumps(models.get_ssh_die_list())

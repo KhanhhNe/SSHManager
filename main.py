@@ -20,16 +20,6 @@ def homepage():
     return redirect('/check-ssh')
 
 
-@app.route('/check-ssh')
-def check_ssh_route():
-    return send_file('templates/check-ssh.html')
-
-
-@app.route('/connect-ssh')
-def connect_ssh_route():
-    return send_file('templates/connect-ssh.html')
-
-
 @app.route('/emit')
 def emit_signal():
     """Emit signal to server & client."""
@@ -51,7 +41,9 @@ def get_icon():
     return send_file('logo.ico')
 
 
+app.register_blueprint(views.check_ssh_blueprint, url_prefix='/check-ssh')
 socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
+app.register_blueprint(views.connect_ssh_blueprint, url_prefix='/connect-ssh')
 socketio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
 
 if __name__ == '__main__':

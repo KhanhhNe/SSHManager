@@ -59,6 +59,7 @@ class ProxyPool:
         asyncio.set_event_loop(loop)
         self.disconnected = False
         self.port_resetting = {}
+        self.port_info = {}
         self.ssh_info = []
         self.lock = asyncio.Lock()
         self.semaphore = asyncio.Semaphore(process_count)
@@ -88,7 +89,7 @@ class ProxyPool:
         Callback is called with a bool param which shows if port is under proxy or not."""
         proxy_info = None
         ssh_info = None
-        callback = callback or _default_callback
+        callback = self.save_port_info_decorator(callback or _default_callback)
         self.port_resetting[port] = False
 
         while True:
@@ -118,11 +119,20 @@ class ProxyPool:
             except ProxyConnectionError:
                 proxy_info = None
 
+    def get_all_port_info(self):
+        return self.port_info
+
     def reset_port(self, port):
         self.port_resetting[port] = True
 
     def disconnect_all_ports(self):
         self.disconnected = True
+
+    def save_port_info_decorator(self, callback):
+        def wrapped(port, ip):
+            self.port_info[port] = ip
+            callback(port, ip)
+        return wrapped
 
 
 # noinspection PyUnusedLocal
