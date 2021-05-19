@@ -142,3 +142,6 @@ cython_debug/
 
 # User data
 user_data
+
+# Built zip file
+SSHManager.zip

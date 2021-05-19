@@ -1,4 +1,6 @@
 import os
+import shutil
+import zipfile
 
 import PyInstaller.__main__
 
@@ -17,3 +19,19 @@ PyInstaller.__main__.run([
     f'--paths={packages_path}',
     '--hidden-import=engineio.async_drivers.threading'
 ])
+
+print("Removing build folder...")
+shutil.rmtree('build')
+print("Zipping files...")
+built_file = zipfile.ZipFile('SSHManager.zip', 'w')
+
+for folder, subfolders, filenames in os.walk(r'dist\SSHManager'):
+    for filename in filenames:
+        filepath = os.path.join(folder, filename)
+        print(f"Zipping {filepath}")
+        built_file.write(filepath, os.path.basename(filepath))
+
+built_file.close()
+print("Removing dist folder...")
+shutil.rmtree('dist')
+print("Done! Happy distributing!")
