@@ -20,18 +20,18 @@ def homepage():
     return redirect('/check-ssh')
 
 
-@app.route('/emit')
+@app.route('/emit', methods=['POST'])
 def emit_signal():
     """Emit signal to server & client."""
     requested = request.get_json()
     try:
         emit(
-            requested['event'], requested['data'], namespace=requested.get('path', '/'),
+            requested['event'], requested['data'], namespace=requested.get('namespace', '/'),
             broadcast=True, include_self=True
         )
-        return 1, 200
-    except AttributeError:
-        return 0, 400
+        return '1', 200
+    except KeyError:
+        return '0', 400
 
 
 @app.route('/assets/<path:path>')
