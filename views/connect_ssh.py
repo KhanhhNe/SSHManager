@@ -30,10 +30,16 @@ class ConnectSSHNamespace(common.CommonNamespace):
             self.pool.add_ssh(ssh['ip'], ssh['username'], ssh['password'])
 
         aws = [self.pool.proxy_port(port, self.port_proxy_callback) for port in port_list]
-        self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
+        try:
+            self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
+        except controllers.OutOfSSHError:
+            self.emit('out_of_ssh')
 
     def on_reset_port(self, port):
         self.pool.reset_port(port)
+
+    def on_out_of_ssh(self):
+        print('ok')
 
     def on_disconnect_all_ssh(self):
         self.pool.disconnect_all_ports()
@@ -60,3 +66,10 @@ def port_info():
     if current_pool is not None:
         return json.dumps(current_pool.get_all_port_info())
     return '{}'
+
+
+@connect_ssh_blueprint.route('/out-of-ssh')
+def out_of_ssh_check():
+    if current_pool is not None:
+        return '1' if current_pool.out_of_ssh() else '0'
+    return '1'

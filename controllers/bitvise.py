@@ -33,6 +33,10 @@ class ProxyConnectionError(BaseException):
     pass
 
 
+class OutOfSSHError(BaseException):
+    pass
+
+
 class ProcessTerminator:
     """Terminates all proxy connection when app closed down."""
     def __init__(self):
@@ -63,9 +67,13 @@ class ProxyPool:
         self.ssh_info = []
         self.lock = asyncio.Lock()
         self.semaphore = asyncio.Semaphore(process_count)
+        self.added = 0
+        self.used = 0
+        self.unusable = 0
 
     def add_ssh(self, host, username, password):
         asyncio.ensure_future(self.verify_and_add_ssh(host, username, password))
+        self.added += 1
 
     async def verify_and_add_ssh(self, host, username, password):
         """Verify a SSH and add it to SSH list if usable."""
@@ -73,15 +81,27 @@ class ProxyPool:
             if await verify_ssh(host, username, password):
                 async with self.lock:
                     self.ssh_info.append([host, username, password])
+            else:
+                async with self.lock:
+                    self.unusable += 1
+
+    def out_of_ssh(self):
+        return self.used + self.unusable >= self.added
+
+    async def wait_for_ssh(self):
+        if self.out_of_ssh():
+            raise OutOfSSHError
+        await asyncio.sleep(0.5)
 
     async def get_ssh(self):
         """Wait until there is at least 1 SSH and return it."""
         while not self.ssh_info:
-            await asyncio.sleep(0.5)
+            await self.wait_for_ssh()
 
         async with self.lock:
             while not self.ssh_info:
-                await asyncio.sleep(0.5)
+                await self.wait_for_ssh()
+            self.used += 1
             return self.ssh_info.pop(0)
 
     async def proxy_port(self, port, callback=None):
