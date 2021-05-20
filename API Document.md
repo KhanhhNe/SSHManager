@@ -154,6 +154,20 @@ Perform port forwarding to specified ports, with auto reconnecting when needed.
    `port_list: port list`
    Example: `[8000, 8005]`
 
+### Out of SSH
+
+Returns if SSH list is used up or not.
+
+* **Namespace:** /connect-ssh
+
+* **Event name:** `out_of_ssh`
+  
+*  **Params:** None
+  
+*  **Returns**
+
+   `1` if SSH is used up, or the SSH connection hasn't started. `0` if everything is fine. 
+
 ### Reset port
 
 Reset port forwarding to specified port, reconnecting to a new one if possible.
