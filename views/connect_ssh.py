@@ -38,6 +38,9 @@ class ConnectSSHNamespace(common.CommonNamespace):
     def on_reset_port(self, port):
         self.pool.reset_port(port)
 
+    def on_out_of_ssh(self):
+        print('ok')
+
     def on_disconnect_all_ssh(self):
         self.pool.disconnect_all_ports()
 
