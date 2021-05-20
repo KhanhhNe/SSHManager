@@ -38,3 +38,9 @@ socket.on('port_proxy', port_data => {
         vm.$data.proxy_list.sort((p1, p2) => p1.port > p2.port ? 1 : -1)
     }
 })
+
+
+socket.on('out_of_ssh', function () {
+    $('#out-of-ssh-toast').toast({autohide: false})
+    $('#out-of-ssh-toast').toast('show')
+})
