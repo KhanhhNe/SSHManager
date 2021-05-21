@@ -25,15 +25,16 @@ shutil.rmtree('build')
 print("Zipping files...")
 built_file = zipfile.ZipFile('SSHManager.zip', 'w')
 
-for folder, subfolders, filenames in os.walk(r'dist\SSHManager'):
+os.chdir('dist')
+for folder, subfolders, filenames in os.walk(r'SSHManager'):
     for filename in filenames:
         filepath = os.path.join(folder, filename)
         print(f"Zipping {filepath}")
-        built_file.write(filepath, os.path.basename(filepath))
+        built_file.write(filepath)
+os.chdir('..')
 
 built_file.close()
 print("Removing dist folder...")
 shutil.rmtree('dist')
-os.remove('main.spec')
 os.remove('SSHManager.spec')
 print("Done! Happy distributing!")
