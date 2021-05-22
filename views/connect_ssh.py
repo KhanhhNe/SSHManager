@@ -8,7 +8,6 @@ import controllers
 import models
 from views import common
 
-
 current_pool: Optional[controllers.ProxyPool] = None
 
 
@@ -36,13 +35,12 @@ class ConnectSSHNamespace(common.CommonNamespace):
             self.emit('out_of_ssh')
 
     def on_reset_port(self, port):
-        self.pool.reset_port(port)
-
-    def on_out_of_ssh(self):
-        print('ok')
+        if self.pool is not None:
+            self.pool.reset_port(port)
 
     def on_disconnect_all_ssh(self):
-        self.pool.disconnect_all_ports()
+        if self.pool is not None:
+            self.pool.disconnect_all_ports()
 
     def port_proxy_callback(self, port, ip):
         self.emit('port_proxy', {'port': port, 'ip': ip})

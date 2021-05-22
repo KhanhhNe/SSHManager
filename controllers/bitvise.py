@@ -57,6 +57,17 @@ class ProcessTerminator:
         self.processes.append(process)
 
 
+def call_once(func):
+    @wraps(func)
+    async def wrapped_func(self, port, *args, **kwargs):
+        if self.monitoring.get(port):
+            return
+        self.monitoring[port] = True
+        await func(self, port, *args, **kwargs)
+        self.monitoring[port] = False
+    return wrapped_func
+
+
 class ProxyPool:
     def __init__(self, process_count=20, loop=None):
         self.loop = loop or asyncio.get_event_loop()
@@ -70,6 +81,7 @@ class ProxyPool:
         self.added = 0
         self.used = 0
         self.unusable = 0
+        self.monitoring = {}
 
     def add_ssh(self, host, username, password):
         asyncio.ensure_future(self.verify_and_add_ssh(host, username, password))
@@ -104,6 +116,7 @@ class ProxyPool:
             self.used += 1
             return self.ssh_info.pop(0)
 
+    @call_once
     async def proxy_port(self, port, callback=None):
         """Auto arrange SSH for a port, ensuring continuous proxy connection on that port.
         Callback is called with a bool param which shows if port is under proxy or not."""
