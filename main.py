@@ -13,6 +13,7 @@ handler = logging.FileHandler('logs.log', mode='w+', encoding='utf-8', delay=Fal
 handler.setLevel(logging.INFO)
 handler.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
 app.logger.addHandler(handler)
+logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
 
 @app.route('/')
