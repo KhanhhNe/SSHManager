@@ -176,7 +176,11 @@ Reset port forwarding to specified port, reconnecting to a new one if possible.
 
 * **Event name:** `reset_port`
   
-*  **Params:** None
+*  **Params:**
+
+  `port` Port to reset
+
+  Example: `8000`
 
 ### Disconnect all ports
 

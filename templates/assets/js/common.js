@@ -13,10 +13,10 @@ function import_ssh_text(ssh_text) {
     vm.$data.ssh_list = ssh_text.split('\n').map(line => {
         const splitted = line.split('|')
         return {
-            'ip': splitted[0],
-            'username': splitted[1],
-            'password': splitted[2]
+            ip: splitted[0],
+            username: splitted[1],
+            password: splitted[2]
         }
-    })
+    }).filter(ssh => ssh.ip && ssh.username && ssh.password)
     socket.emit('ssh', vm.$data.ssh_list)
 }
