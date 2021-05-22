@@ -69,10 +69,15 @@ Emit a signal to both server and connected clients. Use for action triggering/da
 
 * **JSON body**
 
-   **Required:**
-	`event=event_name` **Required**
+    **Required:**
+	
+    `event=event_name`
+  
+    **Optional:**
+  
 	`namespace=/namespace/path` (defaults to default namespace)
-	`data=<data>` **Required**
+  
+	`data=<data>` argument(s) to pass with event (use tuple to pass multiple arguments)
 
 * **Success Response:**
 

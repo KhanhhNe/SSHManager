@@ -27,7 +27,7 @@ def emit_signal():
     requested = request.get_json()
     try:
         emit(
-            requested['event'], requested['data'], namespace=requested.get('namespace', '/'),
+            requested['event'], requested.get('data', tuple()), namespace=requested.get('namespace', '/'),
             broadcast=True, include_self=True
         )
         return '1', 200
