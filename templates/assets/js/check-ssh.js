@@ -1,5 +1,10 @@
 const socket = io('/check-ssh');
 
+socket.on('update_ssh_lists', function (ssh_lists_info) {
+    vm.$data.ssh_live_list = ssh_lists_info.live
+    vm.$data.ssh_die_list = ssh_lists_info.die
+})
+
 socket.on('live', function (ssh) {
     vm.$data.ssh_live_list.push(ssh)
 })

@@ -16,10 +16,10 @@ class CheckSSHNamespace(Namespace):
         self.semaphore = asyncio.Semaphore(models.get_settings()['process_count'], loop=self.loop)
 
     def on_connect(self):
-        for ssh in models.get_ssh_live_list():
-            self.emit('live', ssh)
-        for ssh in models.get_ssh_die_list():
-            self.emit('die', ssh)
+        self.emit('update_ssh_lists', {
+            'live': models.get_ssh_live_list(),
+            'die': models.get_ssh_die_list()
+        })
 
     def on_check_ssh(self):
         ssh_list = models.get_ssh_list()
