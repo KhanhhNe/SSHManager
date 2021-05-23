@@ -2,14 +2,14 @@ import asyncio
 import json
 
 import flask
+from flask_socketio import Namespace
 
 import controllers
 import models
-from views import common
 
 
 # noinspection PyMethodMayBeStatic
-class CheckSSHNamespace(common.CommonNamespace):
+class CheckSSHNamespace(Namespace):
     def __init__(self, namespace):
         super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
@@ -17,9 +17,9 @@ class CheckSSHNamespace(common.CommonNamespace):
 
     def on_connect(self):
         for ssh in models.get_ssh_live_list():
-            self.broadcast('live', ssh)
+            self.emit('live', ssh)
         for ssh in models.get_ssh_die_list():
-            self.broadcast('die', ssh)
+            self.emit('die', ssh)
 
     def on_check_ssh(self):
         ssh_list = models.get_ssh_list()
@@ -34,18 +34,18 @@ class CheckSSHNamespace(common.CommonNamespace):
         async with self.semaphore:
             if await controllers.verify_ssh(*ssh.values()):
                 models.set_ssh_live_list(models.get_ssh_live_list() + [ssh])
-                self.broadcast('live', ssh)
+                self.emit('live', ssh)
             else:
                 models.set_ssh_die_list(models.get_ssh_die_list() + [ssh])
-                self.broadcast('die', ssh)
+                self.emit('die', ssh)
 
     def on_clear_live(self):
         models.set_ssh_live_list([])
-        self.broadcast('clear_live')
+        self.emit('clear_live', data)
 
     def on_clear_die(self):
         models.set_ssh_die_list([])
-        self.broadcast('clear_die')
+        self.emit('clear_die', data)
 
 
 check_ssh_blueprint = flask.Blueprint('check_ssh', 'check_ssh')

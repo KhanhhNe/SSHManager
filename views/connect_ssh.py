@@ -3,16 +3,16 @@ import json
 from typing import Optional
 
 import flask
+from flask_socketio import Namespace
 
 import controllers
 import models
-from views import common
 
 current_pool: Optional[controllers.ProxyPool] = None
 
 
 # noinspection PyMethodMayBeStatic
-class ConnectSSHNamespace(common.CommonNamespace):
+class ConnectSSHNamespace(Namespace):
     def __init__(self, namespace):
         super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
@@ -29,7 +29,7 @@ class ConnectSSHNamespace(common.CommonNamespace):
         try:
             self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
         except controllers.OutOfSSHError:
-            self.broadcast('out_of_ssh')
+            self.emit('out_of_ssh', data)
 
     def on_reset_port(self, port):
         if self.pool is not None:
@@ -40,7 +40,8 @@ class ConnectSSHNamespace(common.CommonNamespace):
             self.pool.disconnect_all_ports()
 
     def port_proxy_callback(self, port, ip):
-        self.broadcast('port_proxy', {'port': port, 'ip': ip})
+        data = {'port': port, 'ip': ip}
+        self.emit('port_proxy', data)
 
 
 connect_ssh_blueprint = flask.Blueprint('connect_ssh', 'connect_ssh')

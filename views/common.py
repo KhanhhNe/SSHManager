@@ -1,11 +1,6 @@
-from flask_socketio import Namespace, emit
+from flask_socketio import Namespace
 
 import models
-
-
-class CommonNamespace(Namespace):
-    def broadcast(self, event, *args):
-        emit(event, *args, broadcast=True, namespace=self.namespace)
 
 
 class MainNamespace(Namespace):
