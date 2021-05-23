@@ -1,10 +1,11 @@
 import logging
 import socket
+import threading
 import webbrowser
 
 import socketio
 from flask import Flask, redirect, send_file, send_from_directory, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 
 import views
 
@@ -22,14 +23,41 @@ def homepage():
     return redirect('/check-ssh')
 
 
+namespaces = [
+    views.MainNamespace('/'),
+    views.CheckSSHNamespace('/check-ssh'),
+    views.CheckSSHNamespace('/connect-ssh')
+]
+ip = socket.gethostbyname(socket.gethostname())
+port = 5000
+server_url = f"http://{ip}:{port}"
+
+
 @app.route('/emit', methods=['POST'])
 def emit_signal():
     """Emit signal to server."""
-    requested = request.get_json()
-    try:
+    def emit_event_to_server(event, data, namespace):
         client = socketio.Client()
-        client.connect(requested.get('namespace', '/'))
-        client.emit(requested['event'], requested.get('data', tuple()))
+        client.connect(f'{server_url}{namespace}')
+        client.emit(event, data)
+
+    try:
+        requested = request.get_json()
+        event = requested['event']
+        data = requested.get('data')
+        namespace = requested.get('namespace', '/')
+        thread = threading.Thread(target=lambda: emit_event_to_server(
+            requested['event'], requested.get('data'),
+            requested.get('namespace', '/')
+        ))
+
+        thread.start()
+        thread.join()
+
+        # emit_event_to_server(
+        #     requested['event'], requested.get('data'),
+        #     requested.get('namespace', '/')
+        # )
         return '1', 200
     except KeyError:
         return '0', 400
@@ -45,15 +73,11 @@ def get_icon():
     return send_file('logo.ico')
 
 
-sio.on_namespace(views.MainNamespace('/'))
 app.register_blueprint(views.check_ssh_blueprint, url_prefix='/check-ssh')
-sio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
 app.register_blueprint(views.connect_ssh_blueprint, url_prefix='/connect-ssh')
-sio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
+for namespace in namespaces:
+    sio.on_namespace(namespace)
 
 if __name__ == '__main__':
-    ip = socket.gethostbyname(socket.gethostname())
-    port = 5000
-    url = f"http://{ip}:{port}"
-    webbrowser.open_new_tab(url)
+    webbrowser.open_new_tab(server_url)
     sio.run(app, host='0.0.0.0', port=port)
