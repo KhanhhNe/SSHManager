@@ -29,7 +29,7 @@ class ConnectSSHNamespace(Namespace):
         try:
             self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
         except controllers.OutOfSSHError:
-            self.emit('out_of_ssh', data)
+            self.emit('out_of_ssh')
 
     def on_reset_port(self, port):
         if self.pool is not None:

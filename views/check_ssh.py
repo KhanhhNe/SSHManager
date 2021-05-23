@@ -41,11 +41,11 @@ class CheckSSHNamespace(Namespace):
 
     def on_clear_live(self):
         models.set_ssh_live_list([])
-        self.emit('clear_live', data)
+        self.emit('clear_live')
 
     def on_clear_die(self):
         models.set_ssh_die_list([])
-        self.emit('clear_die', data)
+        self.emit('clear_die')
 
 
 check_ssh_blueprint = flask.Blueprint('check_ssh', 'check_ssh')
