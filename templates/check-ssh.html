@@ -96,8 +96,8 @@
                         <h1 class="text-left text-success">Live</h1>
                     </div>
                     <div class="col text-right">
-                        <div class="btn-group open"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_live_list, 'live.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="true" type="button"></button>
-                            <div class="dropdown-menu show"><a class="dropdown-item" href="#" v-on:click="ssh_live_list = []" onclick="main_socket.emit(&#39;clear_live&#39;)">Delete list</a></div>
+                        <div class="btn-group"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_live_list, 'live.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                            <div class="dropdown-menu"><a class="dropdown-item" href="#" v-on:click="ssh_live_list = []" onclick="main_socket.emit(&#39;clear_live&#39;)">Delete list</a></div>
                         </div>
                     </div>
                 </div>
@@ -126,8 +126,8 @@
                         <h1 class="text-left text-danger">Die</h1>
                     </div>
                     <div class="col text-right">
-                        <div class="btn-group open"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_list, 'ssh.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="true" type="button"></button>
-                            <div class="dropdown-menu show"><a class="dropdown-item" href="#" v-on:click="ssh_die_list = []" onclick="main_socket.emit(&#39;clear_die&#39;)">Delete list</a></div>
+                        <div class="btn-group"><button class="btn btn-primary" type="button" v-on:click="export_csv(ssh_list, 'ssh.txt')">Export</button><button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false" type="button"></button>
+                            <div class="dropdown-menu"><a class="dropdown-item" href="#" v-on:click="ssh_die_list = []" onclick="main_socket.emit(&#39;clear_die&#39;)">Delete list</a></div>
                         </div>
                     </div>
                 </div>
