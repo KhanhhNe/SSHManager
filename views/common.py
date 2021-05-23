@@ -17,6 +17,7 @@ class MainNamespace(Namespace):
         """Get/Set SSH list on server/client request. If event emitted without ssh_list, returns current SSH list."""
         if ssh_list is not None:
             models.set_ssh_list(ssh_list)
+            self.emit('ssh', models.get_ssh_list())
         else:
             self.emit('ssh', models.get_ssh_list())
 
