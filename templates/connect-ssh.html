@@ -31,7 +31,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-bind:onclick="settings = temp_settings" data-toggle="modal" data-target="#settings-modal">Save</button></div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-bind:onclick="settings = temp_settings; main_socket.emit('settings', settings)" data-toggle="modal" data-target="#settings-modal">Save</button></div>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
     <script src="/assets/js/bs-init.js?h=75b741e6afdc9ac33d9fde7f010bc77e"></script>
     <script src="/assets/js/connect-ssh.js?h=4752bfe83e3799c9ac07b4c11bfdea08"></script>
     <script src="/assets/js/vue-app.js?h=31dcc54fab006baede4b185cb32ae2b0"></script>
-    <script src="/assets/js/common.js?h=ecb06266aae64e70bda0ec333deeb281"></script>
+    <script src="/assets/js/common.js?h=286dec064320f6492d549d2b9540118f"></script>
     <script src="/assets/js/fileSaver.js?h=3dc79a489531e4f96ebcb674709ec092"></script>
 </body>
 

@@ -8,7 +8,7 @@ from flask_socketio import SocketIO, emit
 import views
 
 app = Flask(__name__)
-socketio = SocketIO(app, async_mode='threading')
+sio = SocketIO(app, async_mode='threading')
 handler = logging.FileHandler('logs.log', mode='w+', encoding='utf-8', delay=False)
 handler.setLevel(logging.INFO)
 handler.setFormatter(logging.Formatter('[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
@@ -45,14 +45,15 @@ def get_icon():
     return send_file('logo.ico')
 
 
+sio.on_namespace(views.MainNamespace('/'))
 app.register_blueprint(views.check_ssh_blueprint, url_prefix='/check-ssh')
-socketio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
+sio.on_namespace(views.CheckSSHNamespace('/check-ssh'))
 app.register_blueprint(views.connect_ssh_blueprint, url_prefix='/connect-ssh')
-socketio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
+sio.on_namespace(views.ConnectSSHNamespace('/connect-ssh'))
 
 if __name__ == '__main__':
     ip = socket.gethostbyname(socket.gethostname())
     port = 5000
     url = f"http://{ip}:{port}"
     webbrowser.open_new_tab(url)
-    socketio.run(app, host='0.0.0.0', port=port)
+    sio.run(app, host='0.0.0.0', port=port)

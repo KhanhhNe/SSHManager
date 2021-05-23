@@ -1,9 +1,14 @@
-from flask_socketio import Namespace
+from flask_socketio import Namespace, emit
 
 import models
 
 
 class CommonNamespace(Namespace):
+    def broadcast(self, event, *args):
+        emit(event, *args, broadcast=True, namespace=self.namespace)
+
+
+class MainNamespace(Namespace):
     def on_connect(self):
         self.on_ssh()
         self.on_settings()
