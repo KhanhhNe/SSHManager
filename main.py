@@ -2,6 +2,7 @@ import logging
 import socket
 import webbrowser
 
+import socketio
 from flask import Flask, redirect, send_file, send_from_directory, request
 from flask_socketio import SocketIO, emit
 
@@ -23,13 +24,12 @@ def homepage():
 
 @app.route('/emit', methods=['POST'])
 def emit_signal():
-    """Emit signal to server & client."""
+    """Emit signal to server."""
     requested = request.get_json()
     try:
-        emit(
-            requested['event'], requested.get('data', tuple()), namespace=requested.get('namespace', '/'),
-            broadcast=True, include_self=True
-        )
+        client = socketio.Client()
+        client.connect(requested.get('namespace', '/'))
+        client.emit(requested['event'], requested.get('data', tuple()))
         return '1', 200
     except KeyError:
         return '0', 400
