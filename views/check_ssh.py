@@ -10,22 +10,21 @@ from views import common
 
 # noinspection PyMethodMayBeStatic
 class CheckSSHNamespace(common.CommonNamespace):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, namespace):
+        super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
         self.semaphore = asyncio.Semaphore(models.get_settings()['process_count'], loop=self.loop)
 
     def on_connect(self):
-        super().on_connect()
         for ssh in models.get_ssh_live_list():
-            self.emit('live', ssh)
+            self.broadcast('live', ssh)
         for ssh in models.get_ssh_die_list():
-            self.emit('die', ssh)
+            self.broadcast('die', ssh)
 
     def on_check_ssh(self):
         ssh_list = models.get_ssh_list()
-        models.set_ssh_live_list([])
-        models.set_ssh_die_list([])
+        self.on_clear_live()
+        self.on_clear_die()
 
         coros = [self.check_ssh_handler(ssh) for ssh in ssh_list]
         fut = asyncio.gather(*coros, loop=self.loop)
@@ -35,16 +34,18 @@ class CheckSSHNamespace(common.CommonNamespace):
         async with self.semaphore:
             if await controllers.verify_ssh(*ssh.values()):
                 models.set_ssh_live_list(models.get_ssh_live_list() + [ssh])
-                self.emit('live', ssh)
+                self.broadcast('live', ssh)
             else:
                 models.set_ssh_die_list(models.get_ssh_die_list() + [ssh])
-                self.emit('die', ssh)
+                self.broadcast('die', ssh)
 
     def on_clear_live(self):
         models.set_ssh_live_list([])
+        self.broadcast('clear_live')
 
     def on_clear_die(self):
         models.set_ssh_die_list([])
+        self.broadcast('clear_die')
 
 
 check_ssh_blueprint = flask.Blueprint('check_ssh', 'check_ssh')

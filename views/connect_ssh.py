@@ -13,13 +13,10 @@ current_pool: Optional[controllers.ProxyPool] = None
 
 # noinspection PyMethodMayBeStatic
 class ConnectSSHNamespace(common.CommonNamespace):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, namespace):
+        super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
         self.pool = None
-
-    def on_connect(self):
-        super().on_connect()
 
     def on_connect_ssh(self, port_list):
         global current_pool
@@ -32,7 +29,7 @@ class ConnectSSHNamespace(common.CommonNamespace):
         try:
             self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
         except controllers.OutOfSSHError:
-            self.emit('out_of_ssh')
+            self.broadcast('out_of_ssh')
 
     def on_reset_port(self, port):
         if self.pool is not None:
@@ -43,7 +40,7 @@ class ConnectSSHNamespace(common.CommonNamespace):
             self.pool.disconnect_all_ports()
 
     def port_proxy_callback(self, port, ip):
-        self.emit('port_proxy', {'port': port, 'ip': ip})
+        self.broadcast('port_proxy', {'port': port, 'ip': ip})
 
 
 connect_ssh_blueprint = flask.Blueprint('connect_ssh', 'connect_ssh')
