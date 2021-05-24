@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/assets/css/Footer-Basic.css?h=d15dfcb68fabe0442ff06063b052477c">
     <link rel="stylesheet" href="/assets/css/Navigation-with-Button.css?h=b486ae8ecf6c38e7b0073c57ef30f22f">
     <link rel="stylesheet" href="/assets/css/styles.css?h=d41d8cd98f00b204e9800998ecf8427e">
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 </head>
 
@@ -31,7 +31,7 @@
                             <div class="input-group-append"></div>
                         </div>
                     </div>
-                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-bind:onclick="settings = temp_settings; main_socket.emit('settings', settings)" data-toggle="modal" data-target="#settings-modal">Save</button></div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-bind:onclick="settings = temp_settings" data-toggle="modal" data-target="#settings-modal" onclick="main_socket.emit(&#39;settings&#39;, vm.$data.settings)">Save</button></div>
                 </div>
             </div>
         </div>

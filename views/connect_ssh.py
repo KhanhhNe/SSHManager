@@ -39,6 +39,8 @@ class ConnectSSHNamespace(Namespace):
     def on_disconnect_all_ssh(self):
         if self.pool is not None:
             self.pool.disconnect_all_ports()
+            global current_pool
+            current_pool = self.pool = None
 
     def port_proxy_callback(self, port, ip):
         data = {'port': port, 'ip': ip}
