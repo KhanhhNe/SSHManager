@@ -26,7 +26,7 @@ def homepage():
 namespaces = [
     views.MainNamespace('/'),
     views.CheckSSHNamespace('/check-ssh'),
-    views.CheckSSHNamespace('/connect-ssh')
+    views.ConnectSSHNamespace('/connect-ssh')
 ]
 ip = socket.gethostbyname(socket.gethostname())
 port = 5000
@@ -43,21 +43,12 @@ def emit_signal():
 
     try:
         requested = request.get_json()
-        event = requested['event']
-        data = requested.get('data')
-        namespace = requested.get('namespace', '/')
         thread = threading.Thread(target=lambda: emit_event_to_server(
             requested['event'], requested.get('data'),
             requested.get('namespace', '/')
         ))
-
         thread.start()
         thread.join()
-
-        # emit_event_to_server(
-        #     requested['event'], requested.get('data'),
-        #     requested.get('namespace', '/')
-        # )
         return '1', 200
     except KeyError:
         return '0', 400
