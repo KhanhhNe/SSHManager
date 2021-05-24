@@ -126,8 +126,6 @@ class ProxyPool:
         self.port_resetting[port] = False
 
         while True:
-            if port == 8003:
-                print(self.disconnected, self.port_resetting)
             if self.disconnected or self.port_resetting[port]:
                 if proxy_info is not None:
                     kill_proxy(proxy_info)
