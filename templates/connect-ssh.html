@@ -42,7 +42,7 @@
                         <h4 class="modal-title">Import SSH</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body"><textarea placeholder="1.2.3.4|user|pass" style="width: 100%;" rows="10" onchange="vm.$data.ssh_text = this.value"></textarea></div>
-                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" v-on:click="import_ssh_text(ssh_text)" data-toggle="modal" data-target="#import-ssh-modal">Import</button></div>
+                    <div class="modal-footer"><button class="btn btn-light" type="button" data-dismiss="modal">Close</button><button class="btn btn-primary" type="button" onclick="import_ssh_text(vm.$data.ssh_text)" data-toggle="modal" data-target="#import-ssh-modal">Import</button></div>
                 </div>
             </div>
         </div>
