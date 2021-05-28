@@ -1,0 +1,47 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+altgraph = "==0.17"
+async-timeout = "==3.0.1"
+bcrypt = "==3.2.0"
+bidict = "==0.21.2"
+certifi = "==2020.12.5"
+cffi = "==1.14.5"
+chardet = "==4.0.0"
+click = "==8.0.0"
+colorama = "==0.4.4"
+cryptography = "==3.4.7"
+future = "==0.18.2"
+h11 = "==0.12.0"
+httpcore = "==0.13.3"
+httpx = "==0.18.1"
+httpx-socks = "==0.4.0"
+idna = "==2.10"
+itsdangerous = "==2.0.0"
+markupsafe = "==2.0.0"
+pefile = "==2021.5.13"
+pycparser = "==2.20"
+pyinstaller = "==4.3"
+pyinstaller-hooks-contrib = "==2021.1"
+python-engineio = "==4.2.0"
+python-socketio = "==5.3.0"
+python-socks = "==1.2.4"
+pywin32-ctypes = "==0.2.0"
+requests = "==2.25.1"
+rfc3986 = "==1.5.0"
+six = "==1.16.0"
+sniffio = "==1.2.0"
+urllib3 = "==1.26.4"
+wincertstore = "==0.2"
+Flask = "==2.0.0"
+Flask-SocketIO = "==5.0.3"
+Jinja2 = "==3.0.0"
+Werkzeug = "==2.0.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
