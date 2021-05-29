@@ -119,9 +119,8 @@ class ProxyPool:
     @call_once
     async def proxy_port(self, port, callback=None):
         """Auto arrange SSH for a port, ensuring continuous proxy connection on that port.
-        Callback is called with a bool param which shows if port is under proxy or not."""
+        Callback is called with a str param representing current IP of proxy"""
         proxy_info = None
-        ssh_info = None
         callback = self.save_port_info_decorator(callback or _default_callback)
         self.port_resetting[port] = False
 
@@ -137,9 +136,11 @@ class ProxyPool:
                     self.port_resetting[port] = False
 
             await asyncio.sleep(1)
-            if proxy_info is not None and await is_proxy_usable(proxy_info.address, ssh_info[0]):
-                callback(port, ssh_info[0])
-                continue
+            if proxy_info is not None:
+                ip = await get_proxy_ip(proxy_info.address)
+                if ip:
+                    callback(port, ip)
+                    continue
 
             callback(port, '')
             ssh_info = await self.get_ssh()
@@ -222,7 +223,7 @@ async def _connect_ssh(host, username, password, port=None):
         if 'Enabled SOCKS/HTTP proxy forwarding on ' in output:
             port = re.search(r'Enabled SOCKS/HTTP proxy forwarding on .*?:(\d+)', output).group(1)
             proxy_info = ProxyInfo(port=int(port), pid=process.pid)
-            if await is_proxy_usable(proxy_info.address, host):
+            if await get_proxy_ip(proxy_info.address):
                 return proxy_info
             else:
                 kill_proxy(proxy_info)
@@ -241,14 +242,14 @@ async def verify_ssh(host, username, password):
     return False
 
 
-async def is_proxy_usable(proxy_address, ip):
-    """Validate if the proxy actually works"""
+async def get_proxy_ip(proxy_address) -> str:
+    """Retrieves proxy's IP address. Returns empty string on connection failure"""
     transport = httpx_socks.AsyncProxyTransport.from_url(proxy_address)
     try:
         async with httpx.AsyncClient(transport=transport, timeout=30) as client:
-            return (await client.get('https://api.ipify.org?format=text')).text == ip
+            return (await client.get('https://api.ipify.org?format=text')).text
     except:
-        return False
+        return ''
 
 
 def kill_proxy(proxy_info: ProxyInfo):
@@ -267,9 +268,11 @@ if __name__ == '__main__':
     # print(asyncio.get_event_loop().run_until_complete(connect_ssh('27.74.251.75', 'ubnt', 'ubnt')))
 
     # Test port proxying
-    ssh_lines = open('ssh.csv').read().splitlines()
+    ssh_lines = open(r'.\user_data\ssh.csv').read().splitlines()
     ssh = [line.split('|')[:3] for line in ssh_lines]
     pool = ProxyPool()
     for s in ssh:
         pool.add_ssh(s[0], s[1], s[2])
-    asyncio.get_event_loop().run_until_complete(asyncio.gather(pool.proxy_port(12345), pool.proxy_port(12344)))
+    asyncio.get_event_loop().run_until_complete(
+        asyncio.gather(pool.proxy_port(pool, 12345), pool.proxy_port(pool, 12344))
+    )
