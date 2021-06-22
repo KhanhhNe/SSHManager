@@ -21,8 +21,7 @@ class ConnectSSHNamespace(Namespace):
     def on_connect_ssh(self, port_list):
         global current_pool
         if current_pool is None:
-            process_count = models.get_settings()['process_count']
-            current_pool = self.pool = controllers.ProxyPool(process_count, self.loop)
+            current_pool = self.pool = controllers.ProxyPool(int(models.get_settings()['process_count']), self.loop)
         for ssh in models.get_ssh_list():
             self.pool.add_ssh(ssh['ip'], ssh['username'], ssh['password'])
 

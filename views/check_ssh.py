@@ -13,7 +13,7 @@ class CheckSSHNamespace(Namespace):
     def __init__(self, namespace):
         super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
-        self.semaphore = asyncio.Semaphore(models.get_settings()['process_count'], loop=self.loop)
+        self.semaphore = asyncio.Semaphore(int(models.get_settings()['process_count']), loop=self.loop)
 
     def on_connect(self):
         self.emit('update_ssh_lists', {
