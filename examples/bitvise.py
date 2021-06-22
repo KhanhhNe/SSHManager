@@ -1,6 +1,7 @@
 import asyncio
 import atexit
 import re
+import os
 import socket
 from dataclasses import dataclass
 from functools import wraps
@@ -10,6 +11,7 @@ import httpx
 import httpx_socks
 
 LOGGING = True
+APP_DIR = os.getcwd()
 
 
 def set_logging(print_log):
@@ -204,7 +206,7 @@ async def connect_ssh(host, username, password, port=None):
 
 async def _connect_ssh(host, username, password, port=None):
     process = await asyncio.create_subprocess_exec(
-        'stnlc.exe', host, f'-user={username}', f'-pw={password}',
+        os.path.join(APP_DIR, 'stnlc.exe'), host, f'-user={username}', f'-pw={password}',
         '-proxyFwding=y', f'-proxyListPort={str(port or _get_free_port())}',
         '-noRegistry',
         stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE
