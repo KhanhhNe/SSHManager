@@ -1,6 +1,6 @@
 import asyncio
 
-from controllers import bitvise  # Change this to import path of bitvise.py
+import bitvise
 
 
 async def check_ssh(ssh_list):
@@ -8,7 +8,7 @@ async def check_ssh(ssh_list):
         if await bitvise.verify_ssh(ssh['host'], ssh['username'], ssh['password']):
             print(f"LIVE\t{'|'.join(ssh.values())}")
         else:
-            print(f"DIE\t{'|'.join(ssh.values())}")
+            print(f"DIE\t\t{'|'.join(ssh.values())}")
 
 
 if __name__ == '__main__':
