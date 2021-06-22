@@ -25,11 +25,12 @@ class ConnectSSHNamespace(Namespace):
         for ssh in models.get_ssh_list():
             self.pool.add_ssh(ssh['ip'], ssh['username'], ssh['password'])
 
-        aws = [self.pool.proxy_port(port, self.port_proxy_callback) for port in port_list]
-        try:
-            self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
-        except controllers.OutOfSSHError:
-            self.emit('out_of_ssh')
+        if self.loop.is_running() is False:
+            aws = [self.pool.proxy_port(port, self.port_proxy_callback) for port in port_list]
+            try:
+                self.loop.run_until_complete(asyncio.gather(*aws, loop=self.loop))
+            except controllers.OutOfSSHError:
+                self.emit('out_of_ssh')
 
     def on_reset_port(self, port):
         if self.pool is not None:

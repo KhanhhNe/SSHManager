@@ -1,5 +1,6 @@
 import asyncio
 import json
+from contextlib import suppress
 
 import flask
 from flask_socketio import Namespace
@@ -14,6 +15,7 @@ class CheckSSHNamespace(Namespace):
         super().__init__(namespace)
         self.loop = asyncio.new_event_loop()
         self.semaphore = asyncio.Semaphore(int(models.get_settings()['process_count']), loop=self.loop)
+        self.future = None
 
     def on_connect(self):
         self.emit('update_ssh_lists', {
@@ -26,9 +28,10 @@ class CheckSSHNamespace(Namespace):
         self.on_clear_live()
         self.on_clear_die()
 
-        coros = [self.check_ssh_handler(ssh) for ssh in ssh_list]
-        fut = asyncio.gather(*coros, loop=self.loop)
-        self.loop.run_until_complete(fut)
+        if self.loop.is_running() is False:
+            coros = [self.check_ssh_handler(ssh) for ssh in ssh_list]
+            fut = asyncio.gather(*coros, loop=self.loop)
+            self.loop.run_until_complete(fut)
 
     async def check_ssh_handler(self, ssh):
         async with self.semaphore:
