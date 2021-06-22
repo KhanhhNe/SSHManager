@@ -1,6 +1,5 @@
 import asyncio
 import json
-from contextlib import suppress
 
 import flask
 from flask_socketio import Namespace
