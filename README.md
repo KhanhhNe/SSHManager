@@ -15,9 +15,13 @@ Usage
 ----
 Download the latest release, run SSHManager.exe and a new browser tab will open with the web server URL. You can navigate to that URL on other devices from the same network to access the web interface, too!
 
+Creating your own SSHManager
+----
+Main SSH operations are in `bitvise.py`. To create your own, see the examples of usage in `examples` folder. To use it in your application, copy `bitvise.py`, `stnlc.exe` and all DLL files in `examples` folder to your project, import them and use as described in example codes.
+
 Building your own
 ----
-Doing this requires `Windows 8.1+`, `Python 3.6+` so make sure to install them first to proceed to next steps.
+Doing this requires `Windows 8.1+`, `Python 3.9.5` so make sure to install them first to proceed to next steps.
 Clone the repository
 ```bash
 https://github.com/KhanhhNe/SSHManager.git
