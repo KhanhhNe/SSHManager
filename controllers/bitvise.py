@@ -206,7 +206,7 @@ async def connect_ssh(host, username, password, port=None):
 
 async def _connect_ssh(host, username, password, port=None):
     process = await asyncio.create_subprocess_exec(
-        os.path.join(APP_DIR, 'stnlc.exe'), host, f'-user={username}', f'-pw={password}',
+        os.path.join(APP_DIR, 'bitvise_ssh/stnlc.exe'), host, f'-user={username}', f'-pw={password}',
         '-proxyFwding=y', f'-proxyListPort={str(port or _get_free_port())}',
         '-noRegistry',
         stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE

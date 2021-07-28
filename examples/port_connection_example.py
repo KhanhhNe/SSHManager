@@ -1,6 +1,6 @@
 import asyncio
 
-import bitvise
+from controllers import bitvise
 
 
 def callback(port, proxy_ip):

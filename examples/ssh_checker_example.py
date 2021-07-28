@@ -1,6 +1,6 @@
 import asyncio
 
-import bitvise
+from controllers import bitvise
 
 
 async def check_ssh(ssh_list):
