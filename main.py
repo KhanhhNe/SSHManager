@@ -54,9 +54,9 @@ def emit_signal():
         return '0', 400
 
 
-@app.route('/assets/<path:path>')
+@app.route('/static/<path:path>')
 def get_assets(path):
-    return send_from_directory('templates/assets', path)
+    return send_from_directory('templates/static', path)
 
 
 @app.route('/favicon.ico')
@@ -71,4 +71,4 @@ for namespace in namespaces:
 
 if __name__ == '__main__':
     webbrowser.open_new_tab(server_url)
-    sio.run(app, host='0.0.0.0', port=port)
+    sio.run(app, host='0.0.0.0', port=port, debug=True)

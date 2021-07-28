@@ -1,0 +1,178 @@
+{% extends 'layout.jinja2' %}
+<!--suppress HtmlUnknownAttribute, HtmlFormInputWithoutLabel -->
+
+{% block title %}Connect SSH{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/connect-ssh.css') }}">
+{% endblock %}
+
+{% block data %}
+{% raw %}
+    <section class="ports-input">
+        <h4>Ports</h4>
+        <input type="text" placeholder="8888,8889-8900,...">
+        <button>Add</button>
+    </section>
+    <section class="ports">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" v-model="all_selected"></th>
+                    <th>Port</th>
+                    <th>IP</th>
+                    <th>
+                        <div class="split-buttons">
+                            <button>Reset</button>
+                            <button class="outline fa fa-trash"></button>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="port in ports">
+                    <th><input type="checkbox" v-model="port.selected"></th>
+                    <th><span
+                        :data-tooltip="port_connect_url(port.port)"
+                        :data-clipboard-text="port_connect_url(port.port)"
+                    >{{ port.port }}</span></th>
+                    <th><span
+                        :data-tooltip="proxy_tooltip(port.proxy)"
+                        :data-clipboard-text="proxy_text(port.proxy)"
+                    >{{ port.proxy.ip }}</span></th>
+                    <th>
+                        <div class="split-buttons">
+                            <button>Reset</button>
+                            <button class="outline fa fa-trash"></button>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+{% endraw %}
+{{ macros.ssh_list(['all']) }}
+{% endblock %}
+
+{% block footer %}
+{% raw %}
+    <div>
+        <button>Connect SSH</button>
+        <button class="secondary">Stop</button>
+    </div>
+    <div class="options">
+        <input type="checkbox" id="remove-died-ssh">
+        <label for="remove-died-ssh">Remove used SSH</label>
+    </div>
+{% endraw %}
+{% endblock %}
+
+{% block js %}
+<script>
+    window.data = {
+        ports: [
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            },
+            {
+                port: 8888,
+                selected: true,
+                proxy: {
+                    ip: '255.255.255.255',
+                    username: '0123456789',
+                    password: '0123456789'
+                }
+            }
+        ]
+    }
+    window.methods = {
+        proxy_tooltip: function (proxy) {
+            return `${proxy.username} | ${proxy.password}`
+        },
+        proxy_text: function (proxy) {
+            return `${proxy.ip}|${proxy.username}|${proxy.password}`
+        },
+        port_connect_url: function (port) {
+            return `socks5://localhost:${port}`
+        }
+    }
+    window.computed = {
+        all_selected: {
+            get: function () {
+                for (const port of this.ports) {
+                    if (!port.selected) {
+                        return false
+                    }
+                }
+                return true
+            },
+            set: function (selected) {
+                for (const port of this.ports) {
+                    port.selected = selected
+                }
+            }
+        }
+    }
+    window.watch = {}
+</script>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% import 'macros.jinja2' as macros %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{#    <meta http-equiv="refresh" content="2">#}
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="../static/css/common.css">
+    <script src="https://kit.fontawesome.com/dd91a22075.js" crossorigin="anonymous"></script>
+    {%- block css %}{% endblock -%}
+</head>
+<body>
+<div id="main-app">
+    <nav>
+        <a href="{{ url_for('check_ssh.check_ssh') }}">Check SSH</a>
+        <a href="{{ url_for('connect_ssh.connect_ssh') }}">Connect SSH</a>
+    </nav>
+    <div class="data">
+        {% block data %}{% endblock %}
+    </div>
+    <footer>
+        {% block footer %}{% endblock %}
+    </footer>
+</div>
+<script>
+    for (let link of document.querySelectorAll('nav a')) {
+        if (link.href === location.pathname) {
+            link.classList.add('active')
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+{% block js %}{% endblock %}
+<script>
+    const app = new Vue({
+        el: '#main-app',
+        data: () => {
+            return {
+                ssh_list: [
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: 'live'},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: 'die'},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''},
+                    {ip: '255.255.255.255', username: '0123456789', password: '0123456789', status: ''}
+                ],
+                display_mode: {
+                    all: 'table',
+                    live: 'table',
+                    die: 'table'
+                },
+                ...window.data
+            }
+        },
+        methods: {
+            get_list: function (name) {
+                switch (name) {
+                    case 'all': return this.ssh_list
+                    case 'live': return this.ssh_list.filter(s => s.status === 'live')
+                    case 'die': return this.ssh_list.filter(s => s.status === 'die')
+                }
+            },
+            get_display_mode: function (name) {
+                return this.display_mode[name]
+            },
+            toggle_display_mode: function (name) {
+                switch (this.display_mode[name]) {
+                    case 'table':
+                        this.display_mode[name] = 'text';
+                        break
+                    case 'text':
+                        if (name === 'all') {
+                            this.parse_text();
+                        }
+                        this.display_mode[name] = 'table';
+                        break;
+                }
+            },
+            get_text: function (name) {
+                return this.get_list(name).map(s => Object.values(s).join('|')).join('\n')
+            },
+            parse_text: function () {
+                const text = document.querySelector('#all-list textarea').value
+                const new_list = []
+                for (let line of text.split('\n')) {
+                    try {
+                        const data = line.split('|')
+                        let status
+                        switch (data[3]) {
+                            case 'live': status = 'live'; break
+                            case 'die': status = 'die'; break
+                            default: status = ''
+                        }
+                        new_list.push({
+                            ip: data[0],
+                            username: data[1],
+                            password: data[2],
+                            status: status
+                        })
+                    } catch (e) {}
+                }
+                this.ssh_list = new_list
+            },
+            download_csv: function (name) {
+                const blob = new Blob([this.get_text(name)], {type: "text/plain;charset=utf-8"})
+                const anchor = document.createElement("a")
+                anchor.download = `${name}-list.csv`
+                anchor.href = window.URL.createObjectURL(blob)
+                anchor.click()
+            },
+            ...window.methods
+        },
+        computed: {
+            ...window.computed
+        },
+        watch: {
+            ...window.watch
+        }
+    })
+</script>
+<script src="https://cdn.jsdelivr.net/gh/eligrey/FileSaver.js@master/dist/FileSaver.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+<script>
+    const clipboard = new ClipboardJS('[data-clipboard-text]');
+    clipboard.on('success', function (event) {
+        const tooltip_text = event.trigger.dataset.tooltip
+        event.trigger.dataset.tooltip = "Copied!"
+        setTimeout(() => event.trigger.dataset.tooltip = tooltip_text, 1000)
+    })
+</script>
+</body>
+</html>

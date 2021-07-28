@@ -53,8 +53,8 @@ class CheckSSHNamespace(Namespace):
 check_ssh_blueprint = flask.Blueprint('check_ssh', 'check_ssh')
 
 
-@check_ssh_blueprint.route('/')
-def check_ssh_html():
+@check_ssh_blueprint.route('')
+def check_ssh():
     return flask.send_file('templates/check-ssh.html')
 
 

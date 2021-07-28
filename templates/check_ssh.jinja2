@@ -1,0 +1,36 @@
+<!--suppress HtmlUnknownAttribute, HtmlFormInputWithoutLabel -->
+{% extends 'layout.jinja2' %}
+
+{% block title %}Check SSH{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/check-ssh.css') }}">
+{% endblock %}
+
+{% block data %}
+{{ macros.ssh_list(['all', 'live', 'die']) }}
+{% endblock %}
+
+{% block footer %}
+{% raw %}
+    <div>
+        <button :disabled="checking">Check SSH</button>
+        <button class="secondary" :disabled="!checking">Stop</button>
+    </div>
+    <progress :value="display_progress(progress)"></progress>
+{% endraw %}
+{% endblock %}
+
+{% block js %}
+<script>
+    window.data = {
+        checking: false,
+        progress: undefined
+    }
+    window.methods = {
+        display_progress: function (progress) {
+            return isFinite(progress) ? progress : 1;
+        }
+    }
+</script>
+{% endblock %}

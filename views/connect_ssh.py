@@ -50,8 +50,8 @@ class ConnectSSHNamespace(Namespace):
 connect_ssh_blueprint = flask.Blueprint('connect_ssh', 'connect_ssh')
 
 
-@connect_ssh_blueprint.route('/')
-def connect_ssh_html():
+@connect_ssh_blueprint.route('')
+def connect_ssh():
     return flask.send_file('templates/connect-ssh.html')
 
 

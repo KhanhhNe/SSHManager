@@ -7,12 +7,14 @@ const range = (start, stop) => Array.from(Array(stop - start + 1).keys())
 
 function connect_ssh() {
     $('#connect-ssh-input').addClass('was-validated')
-    if (!$('#port-input').get(0).checkValidity()) {
+    const portInput = $('#port-input');
+
+    if (!portInput.get(0).checkValidity()) {
         return
     }
 
     vm.$data.proxy_list = []
-    const portStr = $('#port-input').val()
+    const portStr = portInput.val()
     const portList = portStr.split(',').map(portOrRange => {
         if (portOrRange.includes('-')) {
             return range(...portOrRange.split('-').map(i => parseInt(i)))
@@ -27,7 +29,7 @@ function connect_ssh() {
 socket.on('port_proxy', port_data => {
     let found = false
     for (let proxy of vm.$data.proxy_list) {
-        if (proxy.port == port_data.port) {
+        if (proxy.port === port_data.port) {
             proxy.ip = port_data.ip
             found = true
             break
@@ -41,6 +43,7 @@ socket.on('port_proxy', port_data => {
 
 
 socket.on('out_of_ssh', function () {
-    $('#out-of-ssh-toast').toast({autohide: false})
-    $('#out-of-ssh-toast').toast('show')
+    const outOfSshToast = $('#out-of-ssh-toast');
+    outOfSshToast.toast({autohide: false})
+    outOfSshToast.toast('show')
 })

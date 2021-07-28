@@ -1,0 +1,49 @@
+<!--suppress HtmlUnknownAttribute, HtmlFormInputWithoutLabel -->
+{% macro ssh_list(names) %}
+<section
+    class="ssh-list"
+    :id="`${name}-list`"
+    v-for="name in {{ names }}"
+    :style="`grid-area: ${name}`"
+>
+{% raw %}
+    <header>
+        <h4>{{ name }} ({{ get_list(name).length }})</h4>
+        <div class="controls">
+            <a @click="download_csv(name)" download class="fa fa-download fa-lg"></a>
+            <input
+                type="checkbox"
+                :id="`${name}-list-display`"
+                :checked="get_display_mode(name) === 'table'"
+                @click="toggle_display_mode(name)"
+                role="switch"
+            >
+            <label :for="`${name}-list-display`">Table mode</label>
+        </div>
+    </header>
+    <table v-if="get_display_mode(name) === 'table'">
+        <thead>
+        <tr>
+            <th></th>
+            <th>IP</th>
+            <th>User</th>
+            <th>Pass</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="ssh in get_list(name)">
+            <td>{{ {live: '✔', die: '❌'}[ssh.status] }}</td>
+            <td>{{ ssh.ip }}</td>
+            <td>{{ ssh.username }}</td>
+            <td>{{ ssh.password }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <textarea
+        v-if="get_display_mode(name) === 'text'"
+        :value="get_text(name)"
+        :readonly="name !== 'all'"
+    ></textarea>
+</section>
+{% endraw %}
+{% endmacro %}
