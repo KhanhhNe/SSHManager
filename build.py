@@ -26,7 +26,7 @@ print("Zipping files...")
 built_file = zipfile.ZipFile('SSHManager.zip', 'w')
 
 os.chdir('dist')
-for folder, subfolders, filenames in os.walk(r'SSHManager'):
+for folder, _, filenames in os.walk(r'SSHManager'):
     for filename in filenames:
         filepath = os.path.join(folder, filename)
         print(f"Zipping {filepath}")
