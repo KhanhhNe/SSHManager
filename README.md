@@ -1,4 +1,4 @@
-﻿# SSHManager
+﻿# SSHManager (deprecated, use https://github.com/KhanhhNe/sshmanager-2.0.0)
 
 An open source tool to manage & use SSH.
 
